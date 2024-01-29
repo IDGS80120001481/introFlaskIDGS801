@@ -1,16 +1,19 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import forms
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("layout3.html")
 
-@app.route("/alumnos")
+@app.route("/alumnos", methods=['GET','POST'])
 def alumnos():
-    titulo = "UTL !!!!"
-    nombres = ["Maria", "Omar", "Pedro", "Juan","Dario"]
-    return render_template("alumnos.html", titulo = titulo, nombres = nombres)
+
+    alumno_clase = forms.UserForm(request.form)
+    if request.method == 'POST':
+        pass 
+    return render_template("alumnos2.html", form=alumno_clase)
 
 @app.route("/maestros")
 def maestros():
@@ -44,10 +47,45 @@ def user(id,nom):
 def suma(n1,n2):
     return "La suma {} + {} = {}".format(n1,n2,n1 + n2)
 
+@app.route("/calcular" , methods=["GET", "POST"])
+def calcular():
+    if request.method== "POST":
+        num1 = request.form.get("n1")
+        num2 = request.form.get("n2")
+        return "La multiplicacion de {} x {} = {}".format(num1,num2,str(int(num1) * int(num2))) 
+    else:
+        return '''
+        <form action="/calcular" method="POST">
+            <label>N1:</label>
+            <input type="text" name="n1"><br>
+            <label>N2:</label>
+            <input type="text" name="n2"><br>
+            <input type="submit">
+        </form>
+    '''
+
+@app.route("/OperasBas" , methods=["GET", "POST"])
+def operasbas():
+    return render_template("OperasBas.html")
+
+@app.route("/resultado")
+def result():
+    if request.method== "POST":
+        num1 = request.form.get("n1")
+        num2 = request.form.get("n2")
+        return "La multiplicacion de {} x {} = {}".format(num1,num2,str(int(num1) * int(num2))) 
+    else:
+        return render_template("OperasBas.html")
+
+    
+
 @app.route("/default")
 @app.route("/default/<string:d>")
 def func3(d="Dario"):
     return "El nombre del usuario es: " + d
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
