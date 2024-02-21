@@ -10,6 +10,15 @@
 </head>
 <body>
 <div class="container">
+    {% with messages=get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
     <div class="row">
         <table class="table table">
             <tr>
@@ -20,6 +29,7 @@
         </table>
 
     {%block container %}
+
     
     {%endblock%}
 
